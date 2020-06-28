@@ -1,0 +1,26 @@
+sudo: false
+
+language:
+  - cpp
+
+addons:
+  sonarcloud:
+    organization: "duxiaocheng"
+    token:
+      secure: "QHhZ6xoDYfESlUx/0t4IWWX+qA9B7UjaFGznlaUE57/+LQ8bSHbVb/A0uOzy10nnGjRX6TwiuUQg1yW68IND3uYnhwjkrymg7h0PE41l5zuMjcP4oJDN9HB2pXu9jer6cnjgxTCVNqZT4Bp+jcf2XOMYhkApv11NcQlay2hbCVYueUUFHHDRM200eWQOO4A3do5c8ET/I00q7jCEas+jHmE9vHGG+4Q1pSTJL1De5T+N4F1LPRg2x9RFah7Cc4oi2sK8jzA3r/sKDIXLdSqwHCmfrTqhP5DK7Nmze1tzC9LrGZVeWMYt+dAY1zZ6XxQuQOv3uo8rKrwSzcnVonUOO6uXItEwVSsz9UQMGbla4G+Poc0lnqUiyR5hJyOd9dQDZYhg1nvP2DHvN14/pON1+tbjYexJ3tIp/a7fTAnZnpoGH5DWH2bp/c6F1GcbStB5eeqDMenh5w3nZDwj6vMTdf6Bac5MHS2HmTf1Wrxf+7VCaHI8fr77HHuYT+MK29jOT4betCQOv4eCcP8kTFKG3DBzqp5WazYcoDAWbJbHoFWnIbo8VpfgK27WutSIlnTmNqzYQO6QYlPD/9Z5HG1smk1fVjrKEFYkbtL8AbaXUeRkjAzi6lvz41wDhC2SGi9DL1GXD45lPD/xNiqY2nRxKjvM6e3Ijtk9eltee4mAQkg="
+
+script:
+  # Prepare the build system
+  - mkdir build
+  - cd build
+  - cmake ..
+  - cd ..
+  # Wraps the compilation with the Build Wrapper to generate configuration (used
+  # later by the SonarScanner) into the "bw-output" folder
+  - build-wrapper-linux-x86-64 --out-dir bw-output cmake --build build/
+  # And finally run the SonarCloud analysis - read the "sonar-project.properties"
+  # file to see the specific configuration
+  - sonar-scanner -Dsonar.cfamily.build-wrapper-output=bw-output
+
+notifications:
+  email: false
