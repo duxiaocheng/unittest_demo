@@ -14,7 +14,7 @@ addons:
 
 # https://docs.travis-ci.com/user/installing-dependencies/
 before_script:
-  - sudo apt-get install -y lcov
+  - sudo pip install gcovr
 
 script:
   # Prepare the build system
@@ -28,8 +28,7 @@ script:
   # Run unit test
   - ./build/bin/unittest_demo --gtest_output=xml:./gtestresults.xml
   # Genenrate coverage
-  - lcov --ignore-errors gcov,source,graph -c  -d ./ -t 'unittest_cov' -o './build/unittest_cov.info' -b ./
-  - python ./tool/lcov_cobertura.py --base-dir=./ --output=./build/coverage.xml --excludes=build* ./build/unittest_cov.info
+  - gcovr --root ./ --exclude build* --sonarqube --output ./build/coverage.xml
   # And finally run the SonarCloud analysis - read the "sonar-project.properties"
   # file to see the specific configuration
   - sonar-scanner -Dsonar.cfamily.build-wrapper-output=bw-output
