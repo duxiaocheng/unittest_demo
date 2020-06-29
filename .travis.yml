@@ -7,6 +7,9 @@ addons:
   sonarcloud:
     organization: "duxiaocheng"
     token:
+      # Use docker image to do travis encrypt: docker.io/sanjose/travis-encrypt
+      # travis login --pro
+      # travis encrypt --pro <token>
       secure: "Z+DkhG7jLqgsFErxnCRLsWamnEy3Zy0E8PhVqN6VEPJelKCAhHCnRQ5+xD0CesL12CMkviZT5glnVvfdgCjG7ZrrGeL1+o/ZW3552GR6aLWWNXkN849dI/VmlgJYxUfywtIyR7SR1LZkeGDFwaHFcCsJAXqj2wooz56BMx/B2FreoOFm9S8+l1hwUj/MC10ZlwR2PPw6abP6Ubp4vbW5PoWyy0dJDp91sh3nLojaiJT5UDA52m9Poj0vTI6Okcm+wtg50BqR7dDOuWhrFnN0p6A1tlleLLKKwxsYYueo6LUG4mAphegTCCBOLUzBgvg1jqkF58uKAO6ZIfpmq0RvVzmt2++CviERCx34pxWANN85MnJOd+WRkRKExgnlhK9Wpn69yaEW02EQZudKBx5TVJF58ePExpvhWUqxKIrhyJUGn6DSf5pJls2zh6H6hJm7s+i8jiOpbbPMnXRhr3dFy0MkJHgd2cbPz5jAsguNbQ5RMXuJk1sSZ51wtL71u0GFjn98lmpluCOCbuGUy1eQwmetPsI9TWpwuDe5D3qGaf3SxNsLm0lcf6IG1TX8hG/1xBvVbAy9w1S4IjfMuKKPgSAgMx1vNN9r8K0eG+R3SvWLIn8yxcICmTR0J9Pi5pZAeE7MF3Jby7H0wvdlqOeV4w2sT4McHsmsy6zIH8WArDA="
 
 script:
@@ -18,6 +21,11 @@ script:
   # Wraps the compilation with the Build Wrapper to generate configuration (used
   # later by the SonarScanner) into the "bw-output" folder
   - build-wrapper-linux-x86-64 --out-dir bw-output cmake --build build/
+  # Run unit test
+  - ./bin/unittest_demo --gtest_output=xml:./gtestresults.xml
+  # Genenrate coverage
+  - lcov --ignore-errors gcov,source,graph -c  -d ../ -t 'unittest_cov' -o './unittest_cov.info' -b ../
+  - python ../tool/lcov_cobertura.py --base-dir=../ --output=./coverage.xml --excludes=build* ./unittest_cov.info
   # And finally run the SonarCloud analysis - read the "sonar-project.properties"
   # file to see the specific configuration
   - sonar-scanner -Dsonar.cfamily.build-wrapper-output=bw-output
