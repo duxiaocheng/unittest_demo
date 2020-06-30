@@ -15,6 +15,7 @@ addons:
 # https://docs.travis-ci.com/user/installing-dependencies/
 before_script:
   - sudo pip install gcovr
+  - sudo pip install lxml
 
 script:
   # Prepare the build system
@@ -26,9 +27,11 @@ script:
   # later by the SonarScanner) into the "bw-output" folder
   - build-wrapper-linux-x86-64 --out-dir bw-output cmake --build build/
   # Run unit test
-  - ./build/bin/unittest_demo --gtest_output=xml:./gtestresults.xml
+  - ./build/bin/unittest_demo --gtest_output=xml:./build/gtestresults.xml
   # Genenrate coverage
   - gcovr --root ./ --exclude build* --sonarqube --output ./build/coverage.xml
+  # Covert xunit/junit xml format to sonar test supported
+  - python ./tool/xml_convert.py ./build/gtestresults.xml ./tool/sonar_test.xsl >./build/sonar_test_result.xml
   # And finally run the SonarCloud analysis - read the "sonar-project.properties"
   # file to see the specific configuration
   - sonar-scanner -Dsonar.cfamily.build-wrapper-output=bw-output
