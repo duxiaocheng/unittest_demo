@@ -6,7 +6,7 @@
 
 <xsl:template match="/">
 <testExecutions version="1">
-  <file path="">
+  <file path="test/testStub.cpp">
     <xsl:apply-templates/>
   </file>
 </testExecutions>
