@@ -13,7 +13,9 @@
 </xsl:template>
 
 <xsl:template match="testsuites/testsuite/testcase">
-  <xsl:copy-of select="."/>
+  <testCase>
+  <xsl:copy-of select = "@*"/>
+  </testCase>
 </xsl:template>
 
 </xsl:stylesheet>
