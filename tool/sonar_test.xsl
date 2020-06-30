@@ -6,19 +6,19 @@
 
 <xsl:template match="/">
 <testExecutions version="1">
-  <file path="test/testStub.cpp">
-    <xsl:apply-templates/>
-  </file>
+  <xsl:apply-templates/>
 </testExecutions>
 </xsl:template>
 
 <xsl:template match="testsuites/testsuite/testcase">
-  <testCase>
-  <xsl:variable name="duration" select="./@time"/>
-  <xsl:attribute name="duration"><xsl:value-of select="number($duration)*1000"/></xsl:attribute>
-  <xsl:copy-of select="@*"/>
-  <xsl:copy-of select="./*"/>
-  </testCase>
+  <file path="test/testStub.cpp">
+    <testCase>
+    <xsl:variable name="duration" select="./@time"/>
+    <xsl:attribute name="duration"><xsl:value-of select="number($duration)*1000"/></xsl:attribute>
+    <xsl:copy-of select="@*"/>
+    <xsl:copy-of select="./*"/>
+    </testCase>
+  </file>
 </xsl:template>
 
 </xsl:stylesheet>
