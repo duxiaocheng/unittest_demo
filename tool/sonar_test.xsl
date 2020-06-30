@@ -14,7 +14,9 @@
 
 <xsl:template match="testsuites/testsuite/testcase">
   <testCase>
-  <xsl:copy-of select = "@*"/>
+  <xsl:attribute name="duration"><xsl:value-of select="./@time"/></xsl:attribute>
+  <xsl:copy-of select="@*"/>
+  <xsl:copy-of select="./*"/>
   </testCase>
 </xsl:template>
 
