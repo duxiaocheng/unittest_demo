@@ -23,22 +23,22 @@ script:
   - mkdir build
   - cd build
   - cmake ..
-  - cd ..
   # Wraps the compilation with the Build Wrapper to generate configuration (used
   # later by the SonarScanner) into the "bw-output" folder
-  - build-wrapper-linux-x86-64 --out-dir bw-output cmake --build build/
+  - build-wrapper-linux-x86-64 --out-dir bw-output cmake --build ./
   # Run unit test
-  - ./build/bin/unittest_demo --gtest_output=xml:./build/gtestresults.xml
+  - ./bin/unittest_demo --gtest_output=xml:./gtestresults.xml
+  - cd ../
   # Genenrate coverage
   - gcovr --root ./ --exclude build* --sonarqube --output ./build/coverage.xml
   # Covert xunit/junit xml format to sonar test supported
   - python ./tool/xml_convert.py ./build/gtestresults.xml ./tool/sonar_test.xsl >./build/sonar_test_result.xml
   # And finally run the SonarCloud analysis - read the "sonar-project.properties"
   # file to see the specific configuration
-  - sonar-scanner -Dsonar.cfamily.build-wrapper-output=bw-output
+  - sonar-scanner -Dsonar.cfamily.build-wrapper-output=./build/bw-output
 
 after_success:
-  coveralls -t mphcfHZEciekrxjMrFdRGZ6dWuiLplZeI -e build/
+  - coveralls -t mphcfHZEciekrxjMrFdRGZ6dWuiLplZeI -E `pwd`/build/
 
 notifications:
   email: false
