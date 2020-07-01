@@ -16,6 +16,7 @@ addons:
 before_script:
   - sudo pip install gcovr
   - sudo pip install lxml
+  - pip install --user cpp-coveralls
 
 script:
   # Prepare the build system
@@ -30,6 +31,7 @@ script:
   - ./build/bin/unittest_demo --gtest_output=xml:./build/gtestresults.xml
   # Genenrate coverage
   - gcovr --root ./ --exclude build* --sonarqube --output ./build/coverage.xml
+  - coveralls -t mphcfHZEciekrxjMrFdRGZ6dWuiLplZeI -e build/
   # Covert xunit/junit xml format to sonar test supported
   - python ./tool/xml_convert.py ./build/gtestresults.xml ./tool/sonar_test.xsl >./build/sonar_test_result.xml
   # And finally run the SonarCloud analysis - read the "sonar-project.properties"
