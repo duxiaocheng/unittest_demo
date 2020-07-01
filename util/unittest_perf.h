@@ -30,6 +30,14 @@ public:
     void report();
 
 private:
+    Perf(Perf& other);
+    Perf& operator=(const Perf& other);
+#if __cplusplus >= 201103L
+    Perf(Perf&& other);
+    Perf& operator=(const Perf&& other);
+#endif
+
+private:
     PerfInternal* internal;
 };
 

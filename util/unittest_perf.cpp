@@ -24,6 +24,13 @@ public:
     void report();
 
 private:
+    PerfInternal(PerfInternal& other);
+    PerfInternal& operator=(const PerfInternal& other);
+#if __cplusplus >= 201103L
+    PerfInternal(PerfInternal&& other);
+    PerfInternal& operator=(const PerfInternal&& other);
+#endif
+
     static void* thread_body(void * arg);
     void create_timer(time_t time);
     void destroy_timer();
